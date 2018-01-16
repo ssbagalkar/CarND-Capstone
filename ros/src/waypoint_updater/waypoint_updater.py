@@ -28,6 +28,12 @@ class WaypointUpdater(object):
     def __init__(self):
         rospy.init_node('waypoint_updater')
 
+        # Define all topics to which we will subscribe:
+        # 1. current_pose
+        # 2.base_waypoints
+        # 3.traffic_waypoint
+        # 4.obstacle_waypoint
+
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 
