@@ -35,7 +35,7 @@ class DBWNode(object):
     def __init__(self):
         rospy.init_node('dbw_node', log_level=rospy.DEBUG)
 
-        self.dbw_enabled = True # drive-by-wire status
+        self.dbw_enabled = False # drive-by-wire status
         self.current_velocity = None
         self.twist_cmd = None
 
@@ -69,18 +69,18 @@ class DBWNode(object):
         self.loop()
 
     def dbw_status_cb(self, msg):
-        self.dbw_enabled = msg
+        self.dbw_enabled = msg.data
         rospy.loginfo("dbw_status_cb %s\n", self.dbw_enabled)
         return
 
     def twist_cb(self, msg):
         self.twist_cmd = msg
-        rospy.loginfo("twist_cb %s\n", self.twist_cmd)
+        #rospy.loginfo("twist_cb %s\n", self.twist_cmd)
         return
 
     def current_velocity_cb(self, msg):
         self.current_velocity = msg
-        rospy.loginfo("current_velocity_cb %s\n", self.current_velocity)
+        #rospy.loginfo("current_velocity_cb %s\n", self.current_velocity)
         return
 
     def loop(self):
@@ -97,7 +97,9 @@ class DBWNode(object):
                 continue
 
             if self.dbw_enabled:
-                self.publish(0,0,0) #throttle, brake, steer
+                self.publish(1,0,0) #throttle, brake, steer
+            else:
+                self.publish(0,0,0)
 
             rate.sleep()
 
