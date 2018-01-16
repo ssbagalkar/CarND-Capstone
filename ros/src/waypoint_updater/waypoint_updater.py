@@ -44,6 +44,11 @@ class WaypointUpdater(object):
 
         # TODO: Add other member variables you need below
 
+        # Initiate flags
+        self.current_pose = None
+        self.waypoints = None
+        self.max_velocity = None
+
         rospy.spin()
 
     def pose_cb(self, msg):
