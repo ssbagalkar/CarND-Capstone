@@ -10,6 +10,7 @@ class PID(object):
         self.kd = kd
         self.min = mn
         self.max = mx
+        self.isFirstStep = True
 
         self.int_val = self.last_int_val = self.last_error = 0.
 
@@ -21,6 +22,11 @@ class PID(object):
         self.last_int_val = self.int_val
 
         integral = self.int_val + error * sample_time;
+
+        if self.isFirstStep is True:
+            self.last_error = error
+            self.isFirstStep = False
+
         derivative = (error - self.last_error) / sample_time;
 
         y = self.kp * error + self.ki * self.int_val + self.kd * derivative;
