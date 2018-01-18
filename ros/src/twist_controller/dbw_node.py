@@ -89,7 +89,7 @@ class DBWNode(object):
         rate = rospy.Rate(50) # 50Hz
         while not rospy.is_shutdown():
             # Upstream or downstream not intialised yet
-            if self.twist_cmd is None or self.current_velocity is None:
+            if (self.twist_cmd is None) or (self.current_velocity is None):
                 continue
 
             # Compute throttle, brake and steering angle and send it to car
@@ -117,12 +117,12 @@ class DBWNode(object):
 
     def dbw_status_cb(self, msg):
         self.dbw_enabled = msg.data
-        rospy.loginfo("dbw_status_cb %s\n", self.dbw_enabled)
+        rospy.logwarn("drive by wire: %s\n", self.dbw_enabled)
         return
 
     def twist_cb(self, msg):
         self.twist_cmd = msg
-        rospy.loginfo("twist_cb %s\n", self.twist_cmd)
+        #rospy.loginfo("twist_cb %s\n", self.twist_cmd)
         return
 
     def current_velocity_cb(self, msg):
