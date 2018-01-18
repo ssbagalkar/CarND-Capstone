@@ -117,7 +117,7 @@ class DBWNode(object):
 
     def dbw_status_cb(self, msg):
         self.dbw_enabled = msg.data
-        rospy.logwarn("drive by wire: %s\n", self.dbw_enabled)
+        rospy.logwarn("drive-by-wire: %s", self.dbw_enabled)
         return
 
     def twist_cb(self, msg):
