@@ -56,7 +56,7 @@ class WaypointUpdater(object):
     def pose_cb(self, msg):
 
         if self.waypoints is None:
-            rospy.logwarn("[WaypointUpdater] No waypoints list yet. Skipping update")
+            rospy.logwarn("[WaypointUpdater] Waiting for waypoints.")
             return
 
         if self.dbw_enabled is False:
@@ -127,6 +127,7 @@ class WaypointUpdater(object):
     def waypoints_cb(self, waypoints):
         self.waypoints = waypoints.waypoints
         self.num_waypoints = len(self.waypoints)
+        rospy.logwarn("[WaypointUpdater] Waypoints received.")
         return
 
     #===================================================================================================================
