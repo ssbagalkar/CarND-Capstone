@@ -53,11 +53,12 @@ class WaypointUpdater(object):
 
     def pose_cb(self, msg):
         # return the current position of the car
-        self.current_position = msg.pose 
+        self.current_position = msg.pose
         pass
 
     def waypoints_cb(self, waypoints):
-        # TODO: Implement
+        #return the x,y of waypoints
+        self.waypoints = waypoints.waypoints
         pass
 
     def traffic_cb(self, msg):
