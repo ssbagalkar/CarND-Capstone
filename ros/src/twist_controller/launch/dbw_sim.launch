@@ -12,7 +12,7 @@
         <param name="max_lat_accel" value="3." />
         <param name="max_steer_angle" value="8." />
         <param name="throttle_control_kp" value="0.1" />
-        <param name="throttle_control_kd" value="1.0" />
+        <param name="throttle_control_kd" value="0.0" />
         <param name="throttle_control_ki" value="0.0" />
     </node>
 </launch>

@@ -1,3 +1,4 @@
+import rospy
 
 MIN_NUM = float('-inf')
 MAX_NUM = float('inf')
@@ -13,6 +14,8 @@ class PID(object):
         self.isFirstStep = True
 
         self.int_val = self.last_int_val = self.last_error = 0.
+
+        #rospy.logwarn("[PID gains] kp: %f, kd: %f, ki: %f", self.kp, self.kd, self.ki)
 
     def reset(self):
         self.int_val = 0.0
