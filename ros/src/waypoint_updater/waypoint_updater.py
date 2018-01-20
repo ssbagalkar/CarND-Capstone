@@ -83,6 +83,19 @@ class WaypointUpdater(object):
             wp1 = i
         return dist
 
+    # def euclidean_distance(self,pose,waypoints):
+    #     return math.sqrt(pose.position.x-waypoints.pose.pose.x)
+
+    def get_closest_waypoint(self, pose, waypoints):
+        closest_length = float('inf')
+        closest_waypoint = 0
+        for i in range(len(waypoints)):
+            distance = self.distance(pose.pose.position, waypoints.pose.pose.position)
+            if distance < closest_length:
+                closest_length = distance
+                closest_waypoint = i
+
+        return closest_waypoint
 
 if __name__ == '__main__':
     try:
