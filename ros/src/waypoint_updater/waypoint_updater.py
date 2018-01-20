@@ -101,7 +101,7 @@ class WaypointUpdater(object):
 
     # This function was given in path planning project.Implementing the same in python
     def next_waypoint(self, pose, waypoints):
-        closest_waypoint = self.closest_waypoint(pose, waypoints)
+        closest_waypoint = self.get_closest_waypoint(pose, waypoints)
         next_x = waypoints[closest_waypoint].pose.pose.position.x
         next_y = waypoints[closest_waypoint].pose.pose.position.y
 
@@ -110,8 +110,8 @@ class WaypointUpdater(object):
         y_quaternion = pose.orientation.y
         z_quaternion = pose.orientation.z
         w_quaternion = pose.orientation.w
-        ,_,_get_euler_angles= tf.transformations.euler_from_quaternion([x_quaternion,y_quaternion,z_quaternion,w_quaternion])
-        angle = abs(_get_euler_angles[-1] - heading)
+        ,_,get_euler_angles= tf.transformations.euler_from_quaternion([x_quaternion,y_quaternion,z_quaternion,w_quaternion])
+        angle = abs(get_euler_angles[-1] - heading)
 
         if angle > (math.pi / 4):
             closest_waypoint += 1
@@ -137,6 +137,11 @@ class WaypointUpdater(object):
 
         # Lookahead waypoints
         lookahead_waypoints = self.waypoints[start_waypoint:end_waypoint]
+
+        lane = lane_object(self.frame_id,lookahead_waypoints)
+
+        self.final_waypoints_pub.publish(lane)
+        
 if __name__ == '__main__':
     try:
         WaypointUpdater()
