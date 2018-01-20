@@ -84,8 +84,6 @@ class WaypointUpdater(object):
             wp1 = i
         return dist
 
-    # def euclidean_distance(self,pose,waypoints):
-    #     return math.sqrt(pose.position.x-waypoints.pose.pose.x)
 
     # This function was given in path planning project.Implementing the same in python
     def get_closest_waypoint(self, pose, waypoints):
@@ -117,7 +115,7 @@ class WaypointUpdater(object):
             closest_waypoint += 1
 
         return closest_waypoint
-    
+
 if __name__ == '__main__':
     try:
         WaypointUpdater()
