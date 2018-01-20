@@ -3,6 +3,7 @@
 import rospy
 from geometry_msgs.msg import PoseStamped
 from styx_msgs.msg import Lane, Waypoint
+import tf
 
 import math
 
@@ -86,6 +87,7 @@ class WaypointUpdater(object):
     # def euclidean_distance(self,pose,waypoints):
     #     return math.sqrt(pose.position.x-waypoints.pose.pose.x)
 
+    # This function was given in path planning project.Implementing the same in python
     def get_closest_waypoint(self, pose, waypoints):
         closest_length = float('inf')
         closest_waypoint = 0
@@ -97,6 +99,25 @@ class WaypointUpdater(object):
 
         return closest_waypoint
 
+    # This function was given in path planning project.Implementing the same in python
+    def next_waypoint(self, pose, waypoints):
+        closest_waypoint = self.closest_waypoint(pose, waypoints)
+        next_x = waypoints[closest_waypoint].pose.pose.position.x
+        next_y = waypoints[closest_waypoint].pose.pose.position.y
+
+        heading = math.atan2((next_y - pose.position.y), (next_x - pose.position.x))
+        x_quaternion = pose.orientation.x
+        y_quaternion = pose.orientation.y
+        z_quaternion = pose.orientation.z
+        w_quaternion = pose.orientation.w
+        ,_,_get_euler_angles= tf.transformations.euler_from_quaternion([x_quaternion,y_quaternion,z_quaternion,w_quaternion])
+        angle = abs(_get_euler_angles[-1] - heading)
+
+        if angle > (math.pi / 4):
+            closest_waypoint += 1
+
+        return closest_waypoint
+    
 if __name__ == '__main__':
     try:
         WaypointUpdater()
