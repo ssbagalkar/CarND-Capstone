@@ -116,6 +116,14 @@ class WaypointUpdater(object):
 
         return closest_waypoint
 
+    # Define a lane object which will be used to publish final waypoints ahead of the car
+    def lane_object(self,frame_id, waypoints):
+        lane = Lane()
+        lane.header.frame_id = frame_id
+        lane.waypoints = waypoints
+        lane.header.stamp = rospy.Time.now()
+        return lane
+
 if __name__ == '__main__':
     try:
         WaypointUpdater()
