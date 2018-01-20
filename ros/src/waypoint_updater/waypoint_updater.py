@@ -49,18 +49,20 @@ class WaypointUpdater(object):
         self.current_position = None
         self.waypoints = None
         self.max_velocity = None
+        self.frame_id = None
 
         rospy.spin()
 
     def pose_cb(self, msg):
         # return the current position of the car
         self.current_position = msg.pose
-        pass
+        self.frame_id = msg.header.frame_id
+
 
     def waypoints_cb(self, waypoints):
         #return the x,y of waypoints
         self.waypoints = waypoints.waypoints
-        pass
+        
 
     def traffic_cb(self, msg):
         # TODO: Callback for /traffic_waypoint message. Implement
@@ -122,6 +124,7 @@ class WaypointUpdater(object):
         lane.header.frame_id = frame_id
         lane.waypoints = waypoints
         lane.header.stamp = rospy.Time.now()
+
         return lane
 
 if __name__ == '__main__':
