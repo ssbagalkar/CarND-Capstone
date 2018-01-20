@@ -62,7 +62,7 @@ class WaypointUpdater(object):
     def waypoints_cb(self, waypoints):
         #return the x,y of waypoints
         self.waypoints = waypoints.waypoints
-        
+
 
     def traffic_cb(self, msg):
         # TODO: Callback for /traffic_waypoint message. Implement
@@ -127,6 +127,16 @@ class WaypointUpdater(object):
 
         return lane
 
+    def publish_waypoints(self):
+        # Get the index of next waypoint
+        index_of_next_waypoint = self.next_waypoint(self.current_position,self.waypoints)
+
+        # Define the starting and end index of waypoints
+        start_waypoint = index_of_next_waypoint
+        end_waypoint = index_of_next_waypoint+LOOKAHEAD_WPS
+
+        # Lookahead waypoints
+        lookahead_waypoints = self.waypoints[start_waypoint:end_waypoint]
 if __name__ == '__main__':
     try:
         WaypointUpdater()
