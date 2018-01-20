@@ -57,6 +57,7 @@ class WaypointUpdater(object):
         # return the current position of the car
         self.current_position = msg.pose
         self.frame_id = msg.header.frame_id
+        self.publish_waypoints()
 
 
     def waypoints_cb(self, waypoints):
@@ -110,7 +111,7 @@ class WaypointUpdater(object):
         y_quaternion = pose.orientation.y
         z_quaternion = pose.orientation.z
         w_quaternion = pose.orientation.w
-        ,_,get_euler_angles= tf.transformations.euler_from_quaternion([x_quaternion,y_quaternion,z_quaternion,w_quaternion])
+        _,_,get_euler_angles= tf.transformations.euler_from_quaternion([x_quaternion,y_quaternion,z_quaternion,w_quaternion])
         angle = abs(get_euler_angles[-1] - heading)
 
         if angle > (math.pi / 4):
@@ -137,6 +138,7 @@ class WaypointUpdater(object):
 
         # Lookahead waypoints
         lookahead_waypoints = self.waypoints[start_waypoint:end_waypoint]
+
 
         lane = lane_object(self.frame_id,lookahead_waypoints)
 
