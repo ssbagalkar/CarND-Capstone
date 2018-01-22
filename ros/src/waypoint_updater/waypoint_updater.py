@@ -79,13 +79,11 @@ class WaypointUpdater(object):
     def set_waypoint_velocity(self, waypoints, waypoint, velocity):
         waypoints[waypoint].twist.twist.linear.x = velocity
 
-    def distance(self, waypoints, wp1, wp2):
-        dist = 0
-        dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
-        for i in range(wp1, wp2+1):
-            dist += dl(waypoints[wp1].pose.pose.position, waypoints[i].pose.pose.position)
-            wp1 = i
-        return dist
+    def distance(self, a, b):
+        x = a.x - b.x
+        y = a.y - b.y
+        z = a.z - b.z
+        return math.sqrt(x*x + y*y + z*z)
 
 
     # This function was given in path planning project.Implementing the same in python
