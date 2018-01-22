@@ -111,7 +111,7 @@ class WaypointUpdater(object):
         y_quaternion = pose.orientation.y
         z_quaternion = pose.orientation.z
         w_quaternion = pose.orientation.w
-        _,_,get_euler_angles= tf.transformations.euler_from_quaternion([x_quaternion,y_quaternion,z_quaternion,w_quaternion])
+        _,_,get_euler_angles= tf.transformations.euler_from_quaternion((x_quaternion,y_quaternion,z_quaternion,w_quaternion))
         angle = abs(get_euler_angles - heading)
 
         if angle > (math.pi / 4):
