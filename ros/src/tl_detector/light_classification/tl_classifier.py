@@ -5,6 +5,8 @@ class TLClassifier(object):
         #TODO load classifier
         pass
 
+
+
     def get_classification(self, image):
         """Determines the color of the traffic light in the image
 
@@ -16,4 +18,7 @@ class TLClassifier(object):
 
         """
         #TODO implement light color prediction
+
+        
+
         return TrafficLight.UNKNOWN
