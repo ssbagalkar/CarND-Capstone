@@ -112,7 +112,7 @@ class WaypointUpdater(object):
         z_quaternion = pose.orientation.z
         w_quaternion = pose.orientation.w
         _,_,get_euler_angles= tf.transformations.euler_from_quaternion([x_quaternion,y_quaternion,z_quaternion,w_quaternion])
-        angle = abs(get_euler_angles[-1] - heading)
+        angle = abs(get_euler_angles - heading)
 
         if angle > (math.pi / 4):
             closest_waypoint += 1
