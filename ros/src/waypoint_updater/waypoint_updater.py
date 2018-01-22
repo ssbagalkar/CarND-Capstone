@@ -91,7 +91,7 @@ class WaypointUpdater(object):
         closest_length = float('inf')
         closest_waypoint = 0
         for i in range(len(waypoints)):
-            distance = self.distance(pose.pose.position, waypoints[i].pose.pose.position)
+            distance = self.distance(pose.position, waypoints[i].pose.pose.position)
             if distance < closest_length:
                 closest_length = distance
                 closest_waypoint = i
@@ -138,10 +138,10 @@ class WaypointUpdater(object):
         lookahead_waypoints = self.waypoints[start_waypoint:end_waypoint]
 
 
-        lane = lane_object(self.frame_id,lookahead_waypoints)
+        lane = self.lane_object(self.frame_id,lookahead_waypoints)
 
         self.final_waypoints_pub.publish(lane)
-        
+
 if __name__ == '__main__':
     try:
         WaypointUpdater()
