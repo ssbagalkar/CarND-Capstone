@@ -91,7 +91,7 @@ class WaypointUpdater(object):
         closest_length = float('inf')
         closest_waypoint = 0
         for i in range(len(waypoints)):
-            distance = self.distance(pose.pose.position, waypoints.pose.pose.position)
+            distance = self.distance(pose.pose.position, waypoints[i].pose.pose.position)
             if distance < closest_length:
                 closest_length = distance
                 closest_waypoint = i
