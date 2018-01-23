@@ -122,7 +122,7 @@ class TLDetector(object):
                     closest_waypoint = i
         return closest_waypoint
 
-    #TODO: refactor this DRY
+    #TODO: refactor this #DRY
     def get_closest_stop_line(self, pose, stop_line_positions):
         closest_stop_line = None
         closest_distance = float('inf')

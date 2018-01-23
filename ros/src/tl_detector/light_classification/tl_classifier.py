@@ -6,13 +6,12 @@ import tensorflow as tf
 
 from collections import defaultdict
 from io import StringIO
-from matplotlib import pyplot as plt
 from PIL import Image
 
 class TLClassifier(object):
     def __init__(self):
-        CKPT = '../CNN/frozen_inference_graph.pb'
-        PATH_TO_LABELS = '../CNN/label_map.pbtxt'
+        CKPT = 'frozen_inference_graph.pb'
+        PATH_TO_LABELS = 'label_map.pbtxt'
 
         NUM_CLASSES = 14
 
@@ -20,14 +19,13 @@ class TLClassifier(object):
         detection_graph = tf.Graph()
 
         with detection_graph.as_default():
-            
-        od_graph_def = tf.GraphDef()
+            od_graph_def = tf.GraphDef()
 
-        with tf.gfile.GFile(CKPT, 'rb') as fid:
-                
-            serialized_graph = fid.read()
-            od_graph_def.ParseFromString(serialized_graph)
-            tf.import_graph_def(od_graph_def, name='')
+            with tf.gfile.GFile(CKPT, 'rb') as fid:
+
+                serialized_graph = fid.read()
+                od_graph_def.ParseFromString(serialized_graph)
+                tf.import_graph_def(od_graph_def, name='')
 
         # load label map
         label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
@@ -38,9 +36,9 @@ class TLClassifier(object):
 
     # load image from disk
     def load_image_into_numpy_array(image):
-    (im_width, im_height) = image.size
-    return np.array(image.getdata()).reshape(
-        (im_height, im_width, 3)).astype(np.uint8)
+        (im_width, im_height) = image.size
+        return np.array(image.getdata()).reshape(
+            (im_height, im_width, 3)).astype(np.uint8)
 
     def label_to_traffic_light_map(label):
         return {
@@ -58,7 +56,7 @@ class TLClassifier(object):
             12: TrafficLight.GREEN,
             13: TrafficLight.RED,
             14: TrafficLight.RED
-        }
+        }.get(label, TrafficLight.UNKNOWN)
 
     def get_classification(self, image):
         """Determines the color of the traffic light in the image
