@@ -52,9 +52,11 @@ class Controller(object):
                 throttle = self.decel_limit
 
             # compute brake torque : wheel_radius * (vehicle_mass + fuel_mass) * acceleration
-            # TODO: integrate brake_deadband here. But I don't know what that term means
-            if throttle < 0:
+            if throttle < -self.brake_deadband:
                 brake = -throttle * self.wheel_radius * (self.vehicle_mass + self.fuel_capacity*GAS_DENSITY)
+                throttle = 0.
+            elif throttle < self.brake_deadband:
+                brake = 0.
                 throttle = 0.
             else:
                 brake = 0.

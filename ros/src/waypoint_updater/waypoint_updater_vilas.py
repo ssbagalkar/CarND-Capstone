@@ -87,6 +87,7 @@ class WaypointUpdater(object):
             self.init_closest_wp_check = False
             nearest_index = 0
             end_index = nearest_index + self.num_waypoints
+            #rospy.logwarn("[waypoint_updater] Reset nearest waypoint search")
         else:
             nearest_index = self.closest_wp_index
             end_index = nearest_index + LOOKAHEAD_WPS
@@ -113,12 +114,12 @@ class WaypointUpdater(object):
         lane.waypoints = []
         for i in range(from_index, from_index + LOOKAHEAD_WPS):
             waypoint = self.waypoints[i%self.num_waypoints]
-            waypoint.twist.twist.linear.x = 22.
-            waypoint.twist.twist.linear.y = 0.
-            waypoint.twist.twist.linear.z = 0.
-            waypoint.twist.twist.angular.x = 0.
-            waypoint.twist.twist.angular.y = 0.
-            waypoint.twist.twist.angular.z = 0.
+            #waypoint.twist.twist.linear.x = 22.
+            #waypoint.twist.twist.linear.y = 0.
+            #waypoint.twist.twist.linear.z = 0.
+            #waypoint.twist.twist.angular.x = 0.
+            #waypoint.twist.twist.angular.y = 0.
+            #waypoint.twist.twist.angular.z = 0.
             lane.waypoints.append(waypoint)
             #rospy.logwarn("%s", waypoint.pose.pose.position.x)
         return lane
