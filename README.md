@@ -21,7 +21,11 @@
 
 ### Waypoints update
 
-*TODO*
+The eventual purpose of this node is to publish a fixed number of waypoints ahead of the vehicle with the correct target velocities. Depending on traffic lights the velocity is set. This node will subscribe to the /base_waypoints, /current_pose,  and /traffic_waypoint topics, and publish a list of waypoints ahead of the car with target velocities to the /final_waypoints topic as shown below:
+
+![png](./imgs/waypoint-updater-ros-graph.png)
+
+The Wapoints update funtion is implemented in the waypoint_updater.py file.
 
 ### Control
 
