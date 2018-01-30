@@ -13,7 +13,8 @@
 
 ### Executive Summary
 
-*TODO*
+#### Architecture
+![png](./imgs/final-project-ros-graph-v2.png)
 
 ### Traffic Lights Detection
 
@@ -38,8 +39,15 @@ The Wapoints update funtion is implemented in the waypoint_updater.py file.
 
 ### Control
 
-*TODO*
+The controller module sends desired steering angle, throttle and brake commands to the car.  
 
+![png](./imgs/dbw-node-ros-graph.png)
+
+The control logic is implemented in `dbw_node.py`. A standard PID controller was implemented in `twist_controller.py` 
+for generating throttle and brake commands, and a pre-existing steering controller provided in the repo was used for 
+generating steering commands. Throttle and steering angle limits set by parameter files are obeyed by the controller. 
+This node also correctly handles toggle between manual/auto modes.
+ 
 ### Results
 
 *TODO*
