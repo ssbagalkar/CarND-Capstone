@@ -17,6 +17,15 @@
 
 ### Traffic Lights Detection
 
+#### Detection node
+The traffic light detection logic is in the detector node (`ros/src/tl_detector/tl_detector.py`). The purpose of this node is to alert the vehicle when it's approaching a red light. Specifically, the detector node subscribes to the `/current_pose` and `/base_waypoints` topics and uses a global list of traffic light coordinates to determine if it's approaching a traffic light, i.e. under 80 meters. We believe this is appropriate since at 42mph, or 19m/s, this gives the vehicle about 4 seconds to come to a complete stop if the traffic light is red. 
+
+The vehicle receives a steady stream of camera images from its front-facing camera, and once it's determined that the vehicle is approaching a traffic light, the detector node then uses a classifier (`ros/src/tl_detector/tl_classifier.py`) to draw bounding boxes of traffic lights in the image and determine their colors. This information will then be published via the `/traffic_waypoint` topic of which the waypoint updater node subscribes to.
+
+![png](./img/tl-detector-ros-graph.png)
+
+#### Classifier
+
 *TODO*
 
 ### Waypoints update
