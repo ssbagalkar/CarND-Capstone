@@ -22,7 +22,7 @@ The traffic light detection logic is in the detector node (`ros/src/tl_detector/
 
 The vehicle receives a steady stream of camera images from its front-facing camera, and once it's determined that the vehicle is approaching a traffic light, the detector node then uses a classifier (`ros/src/tl_detector/tl_classifier.py`) to draw bounding boxes of traffic lights in the image and determine their colors. This information will then be published via the `/traffic_waypoint` topic of which the waypoint updater node subscribes to.
 
-![png](./img/tl-detector-ros-graph.png)
+![png](./imgs/tl-detector-ros-graph.png)
 
 #### Classifier
 
