@@ -128,7 +128,7 @@ class TLDetector(object):
         closest_distance = float('inf')
         for i in range(len(stop_line_positions)):
             distance_2D = self.distance([pose.position.x, pose.position.y], stop_line_positions[i])
-            if distance_2D < closest_distance and distance_2D < 5:
+            if distance_2D < closest_distance and distance_2D < 80:
                 closest_distance = distance_2D
                 closest_stop_line = i
         return closest_stop_line
