@@ -54,14 +54,6 @@ class WaypointUpdater(object):
             orientation_list = self.car_orientation
             try:
                 (car_roll, car_pitch, car_yaw) = euler_from_quaternion(orientation_list)
-                dist_inc = 0.2
-                next_x = []
-                next_y = []
-                next_z = []
-                next_val_x = []
-
-
-
                 next_wpt = self.next_waypoint(car_pts,car_yaw,waypoints)
                 next_x,next_y,next_z,next_val_x = self.find_next_pts(waypoints,next_wpt)
                 self.publish_final_wpt(next_x,next_y,next_z,next_val_x)
@@ -75,8 +67,6 @@ class WaypointUpdater(object):
     
 
     def pose_cb(self, msg):
-        # TODO: Implement
-
         self.car_x = msg.pose.position.x
         self.car_y = msg.pose.position.y
         self.car_z = msg.pose.position.z
@@ -115,28 +105,27 @@ class WaypointUpdater(object):
         next_y =[]
         next_z =[]
         next_val_x = []
-        vel = 10.0
 
         if self.traffic_signal != -1:
             # do the implimentation to slow down the car on TL
             final_wpt = self.traffic_signal
-            vel = 0.0
+            for i in range(next_wpt, final_wpt):
+                index = i % len(waypoints)
+                next_x.append(waypoints[index].pose.pose.position.x)
+                next_y.append(waypoints[index].pose.pose.position.y)
+                next_z.append(waypoints[index].pose.pose.position.z)
+                next_val_x.append(0.0)
 
         else :
             final_wpt = next_wpt + LOOKAHEAD_WPS
-
-
-        for i in range(next_wpt,final_wpt):
-            #check if i exceeds the length of the waypoint index 
-            index = i%len(waypoints)
-            next_x.append(waypoints[index].pose.pose.position.x)
-            next_y.append(waypoints[index].pose.pose.position.y)
-            next_z.append(waypoints[index].pose.pose.position.z)
-            next_val_x.append(vel)
+            for i in range(next_wpt,final_wpt):
+                index = i%len(waypoints)
+                next_x.append(waypoints[index].pose.pose.position.x)
+                next_y.append(waypoints[index].pose.pose.position.y)
+                next_z.append(waypoints[index].pose.pose.position.z)
+                next_val_x.append(waypoints[index].twist.twist.linear.x)
 
         return next_x,next_y,next_z ,next_val_x
-
-
 
     def publish_final_wpt(self,next_x,next_y,next_z,next_val_x):
         wpts = []
