@@ -1,13 +1,13 @@
 # Captone Project - Team BetterLateThanNever
 
 ## Team Members
-| Name                          | Contact e-mail         | Role                     |
-| ----------------------------- | :--------------------- |:-------------------------|
-| Razvan Itu                    | itu.razvan@gmail.com   | Traffic lights detection |
-| Harry Wang                    | wangharr@gmail.com     | Traffic lights detection |
-| Saurabh Bagalkar              | sbagalka@asu.edu       | Waypoint updater         |
-| Vijayakumar Krishnaswamy      | kvijay.krish@gmail.com | Waypoint updater         |
-| Vilas Chitrakaran (Team Lead) | cvilas@gmail.com       | Control                  |
+| Name                          | Contact e-mail         | Role       |
+| ----------------------------- | :--------------------- |:-----------|
+| Razvan Itu                    | itu.razvan@gmail.com   | Perception |
+| Harry Wang                    | wangharr@gmail.com     | Perception |
+| Saurabh Bagalkar              | sbagalka@asu.edu       | Planning   |
+| Vijayakumar Krishnaswamy      | kvijay.krish@gmail.com | Planning   |
+| Vilas Chitrakaran (Team Lead) | cvilas@gmail.com       | Control    |
 
 ## Implementation Details
 
@@ -16,26 +16,26 @@
 #### Architecture
 ![png](./imgs/final-project-ros-graph-v2.png)
 
-### Traffic Lights Detection
+### Perception
 
-#### Detection node
+#### Traffic Light Detection
 The traffic light detection logic is in the detector node (`ros/src/tl_detector/tl_detector.py`). The purpose of this node is to alert the vehicle when it's approaching a red light. Specifically, the detector node subscribes to the `/current_pose` and `/base_waypoints` topics and uses a global list of traffic light coordinates to determine if it's approaching a traffic light, i.e. under 80 meters. We believe this is appropriate since at 42mph, or 19m/s, this gives the vehicle about 4 seconds to come to a complete stop if the traffic light is red. 
 
 The vehicle receives a steady stream of camera images from its front-facing camera, and once it's determined that the vehicle is approaching a traffic light, the detector node then uses a classifier (`ros/src/tl_detector/tl_classifier.py`) to draw bounding boxes of traffic lights in the image and determine their colors. This information will then be published via the `/traffic_waypoint` topic of which the waypoint updater node subscribes to.
 
 ![png](./imgs/tl-detector-ros-graph.png)
 
-#### Classifier
+#### Traffic Light Classifier
 
 *TODO*
 
-### Waypoints update
+### Planning
 
-The eventual purpose of this node is to publish a fixed number of waypoints ahead of the vehicle with the correct target velocities. Depending on traffic lights the velocity is set. This node will subscribe to the /base_waypoints, /current_pose,  and /traffic_waypoint topics, and publish a list of waypoints ahead of the car with target velocities to the /final_waypoints topic as shown below:
+The eventual purpose of this node is to publish a fixed number of waypoints ahead of the vehicle with the correct target velocities. Depending on traffic lights the velocity is set. This node subscribes to the `/base_waypoints`, `/current_pose`,  and `/traffic_waypoint` topics, and publishes a list of waypoints ahead of the car with target velocities to the `/final_waypoints` topic as shown below:
 
 ![png](./imgs/waypoint-updater-ros-graph.png)
 
-The Wapoints update funtion is implemented in the waypoint_updater.py file.
+The Wapoints update funtion is implemented in the `waypoint_updater.py` file.
 
 ### Control
 
