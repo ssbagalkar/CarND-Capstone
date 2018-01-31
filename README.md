@@ -13,8 +13,11 @@
 
 ### Executive Summary
 
-#### Architecture
-![png](./imgs/final-project-ros-graph-v2.png)
+This project implements a basic pipeline for autonomous highway driving obeying traffic lights along the way. The system architecture is as follows:
+
+![architecture](./imgs/final-project-ros-graph-v2.png)
+
+As a team we were able to get all the individual modules working on their own and wire them up correctly. However, we were unable to resolve latencies in the pipeline due to camera image data and its processing in the traffic light classifier. Therefore, the light classification lags behind, causing the simulated car to not stop immediately ahead of the lights. The car eventually stops after a significant overshoot on our test machines (we do not have GPU enabled machines).
 
 ### Perception
 
@@ -23,17 +26,22 @@ The traffic light detection logic is in the detector node (`ros/src/tl_detector/
 
 The vehicle receives a steady stream of camera images from its front-facing camera, and once it's determined that the vehicle is approaching a traffic light, the detector node then uses a classifier (`ros/src/tl_detector/tl_classifier.py`) to draw bounding boxes of traffic lights in the image and determine their colors. This information will then be published via the `/traffic_waypoint` topic of which the waypoint updater node subscribes to.
 
-![png](./imgs/tl-detector-ros-graph.png)
+![traffic light detector node](./imgs/tl-detector-ros-graph.png)
 
 #### Traffic Light Classifier
 
-*TODO*
+We used the TensorFlow Object Detection API to train the Faster R-CNN model to classify traffic light state. The classifier itself is implemented in `tl_classifier.py`. Here are some example results from the classifier.
+
+| Red | Amber | Green |
+|------|------|-------|
+| ![red](./imgs/tl_detection-result-sim-1.png) | ![amber](./imgs/tl_detection-result-sim-2.png) | ![green](./imgs/tl_detection-result-sim-3.png) |
+
 
 ### Planning
 
 The eventual purpose of this node is to publish a fixed number of waypoints ahead of the vehicle with the correct target velocities. Depending on traffic lights the velocity is set. This node subscribes to the `/base_waypoints`, `/current_pose`,  and `/traffic_waypoint` topics, and publishes a list of waypoints ahead of the car with target velocities to the `/final_waypoints` topic as shown below:
 
-![png](./imgs/waypoint-updater-ros-graph.png)
+![waypoint updater](./imgs/waypoint-updater-ros-graph.png)
 
 The Wapoints update funtion is implemented in the `waypoint_updater.py` file.
 
@@ -41,18 +49,13 @@ The Wapoints update funtion is implemented in the `waypoint_updater.py` file.
 
 The controller module sends desired steering angle, throttle and brake commands to the car.  
 
-![png](./imgs/dbw-node-ros-graph.png)
+![dbw node](./imgs/dbw-node-ros-graph.png)
 
 The control logic is implemented in `dbw_node.py`. A standard PID controller was implemented in `twist_controller.py` 
 for generating throttle and brake commands, and a pre-existing steering controller provided in the repo was used for 
 generating steering commands. Throttle and steering angle limits set by parameter files are obeyed by the controller. 
 This node also correctly handles toggle between manual/auto modes.
  
-### Results
-
-*TODO*
-
-
 # Original README
 
 This is the project repo for the final project of the Udacity Self-Driving Car Nanodegree: Programming a Real Self-Driving Car. For more information about the project, see the project introduction [here](https://classroom.udacity.com/nanodegrees/nd013/parts/6047fe34-d93c-4f50-8336-b70ef10cb4b2/modules/e1a23b06-329a-4684-a717-ad476f0d8dff/lessons/462c933d-9f24-42d3-8bdc-a08a5fc866e4/concepts/5ab4b122-83e6-436d-850f-9f4d26627fd9).
