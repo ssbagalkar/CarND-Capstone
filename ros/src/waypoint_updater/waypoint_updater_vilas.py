@@ -23,7 +23,7 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this number
+LOOKAHEAD_WPS = 50 # Number of waypoints we will publish. You can change this number
 
 
 class WaypointUpdater(object):
@@ -50,27 +50,25 @@ class WaypointUpdater(object):
         self.closest_wp_index = 0
         self.dbw_enabled = False
         self.init_closest_wp_check = True
+        self.traffic_signal = -1
 
-        rospy.spin()
+        while not rospy.is_shutdown():
+            if self.waypoints is None:
+                rospy.logwarn("[WaypointUpdater] Waiting for waypoints.")
+
+            elif self.current_pose_msg is None:
+                self.init_closest_wp_check = True
+                rospy.logwarn("[WaypointUpdater] Waiting for car pose.")
+
+            else:
+                self.compute_waypoints()
+
+            rospy.Rate(10).sleep()
+        #rospy.spin()
 
     #===================================================================================================================
     def pose_cb(self, msg):
-
-        if self.waypoints is None:
-            rospy.logwarn("[WaypointUpdater] Waiting for waypoints.")
-            return
-
-        if self.dbw_enabled is False:
-            self.init_closest_wp_check = True
-            return
-
-        if self.current_pose_msg is None:
-            self.init_closest_wp_check = True
-
         self.current_pose_msg = msg
-
-        self.compute_waypoints()
-
         return
 
     #===================================================================================================================
@@ -113,16 +111,18 @@ class WaypointUpdater(object):
         lane.header.frame_id = self.current_pose_msg.header.frame_id
         lane.header.stamp = rospy.get_rostime()
         lane.waypoints = []
-        for i in range(from_index, from_index + LOOKAHEAD_WPS):
+        to_index = from_index + LOOKAHEAD_WPS
+        stop_car = False
+        if self.traffic_signal != -1:
+            to_index = self.traffic_signal
+            stop_car = True
+            rospy.logwarn("[waypoint_updater] STOP LIGHT")
+
+        for i in range(from_index, to_index):
             waypoint = self.waypoints[i%self.num_waypoints]
-            #waypoint.twist.twist.linear.x = 22.
-            #waypoint.twist.twist.linear.y = 0.
-            #waypoint.twist.twist.linear.z = 0.
-            #waypoint.twist.twist.angular.x = 0.
-            #waypoint.twist.twist.angular.y = 0.
-            #waypoint.twist.twist.angular.z = 0.
+            if stop_car is True:
+                waypoint.twist.twist.linear.x = 0.
             lane.waypoints.append(waypoint)
-            #rospy.logwarn("%s", waypoint.pose.pose.position.x)
         return lane
 
     #===================================================================================================================
@@ -134,14 +134,16 @@ class WaypointUpdater(object):
 
     #===================================================================================================================
     def dbw_status_cb(self, msg):
+        self.init_closest_wp_check = True
         self.dbw_enabled = msg.data
+
         #rospy.logwarn("[waypoint_updater] drive-by-wire: %s", self.dbw_enabled)
         return
 
     #===================================================================================================================
     def traffic_cb(self, msg):
-        # TODO: Callback for /traffic_waypoint message. Implement
-        pass
+        self.traffic_signal = msg.data
+        return
 
     #===================================================================================================================
     def obstacle_cb(self, msg):

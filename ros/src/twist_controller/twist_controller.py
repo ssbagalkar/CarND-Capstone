@@ -52,7 +52,7 @@ class Controller(object):
                 throttle = self.decel_limit
 
             # compute brake torque : wheel_radius * (vehicle_mass + fuel_mass) * acceleration
-            if throttle < -self.brake_deadband:
+            if throttle < 0:
                 brake = -throttle * self.wheel_radius * (self.vehicle_mass + self.fuel_capacity*GAS_DENSITY)
                 throttle = 0.
             elif throttle < self.brake_deadband:

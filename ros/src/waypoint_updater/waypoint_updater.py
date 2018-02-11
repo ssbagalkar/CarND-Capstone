@@ -64,7 +64,6 @@ class WaypointUpdater(object):
     
     def traffic_cb(self,msg):
         self.traffic_signal = msg.data
-    
 
     def pose_cb(self, msg):
         self.car_x = msg.pose.position.x
